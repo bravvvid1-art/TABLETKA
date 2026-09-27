@@ -34,24 +34,57 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Install dependencies
-        run: npm install
+        id: npm_install
+        shell: bash
+        run: |
+          set -o pipefail
+          npm install 2>&1 | tee npm-install.log
 
       - name: Build web app
-        run: npm run build
+        id: web_build
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee web-build.log
 
       - name: Create Android project
-        run: npx cap add android
+        id: cap_add
+        shell: bash
+        run: |
+          set -o pipefail
+          npx cap add android 2>&1 | tee cap-add.log
 
       - name: Sync Capacitor
-        run: npx cap sync android
+        id: cap_sync
+        shell: bash
+        run: |
+          set -o pipefail
+          npx cap sync android 2>&1 | tee cap-sync.log
 
       - name: Build debug APK
+        id: gradle_build
         working-directory: android
+        shell: bash
         run: |
+          set -o pipefail
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug 2>&1 | tee ../gradle-build.log
+
+      - name: Upload diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TABLETKA-build-logs
+          path: |
+            npm-install.log
+            web-build.log
+            cap-add.log
+            cap-sync.log
+            gradle-build.log
+          if-no-files-found: ignore
 
       - name: Upload APK artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: TABLETKA-debug-apk
@@ -59,7 +92,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish latest test APK
-        if: github.ref == 'refs/heads/main'
+        if: success() && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: test-latest
