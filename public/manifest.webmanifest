@@ -1,0 +1,9 @@
+{
+  "name": "ТАБЛЕТКА",
+  "short_name": "ТАБЛЕТКА",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eef8f6",
+  "theme_color": "#0f766e",
+  "description": "Напоминания о приёме лекарств"
+}
