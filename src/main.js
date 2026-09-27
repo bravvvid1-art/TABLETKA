@@ -2,7 +2,7 @@ import './styles.css';
 import { Capacitor } from '@capacitor/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.1';
 const MEDS_KEY = 'tabletka_meds_v1';
 const LOG_KEY = 'tabletka_log_v1';
 
