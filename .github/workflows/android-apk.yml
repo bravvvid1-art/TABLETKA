@@ -76,7 +76,7 @@ jobs:
         run: |
           set -o pipefail
           chmod +x gradlew
-          ./gradlew assembleDebug 2>&1 | tee ../gradle-build.log
+          ./gradlew assembleRelease 2>&1 | tee ../gradle-build.log
 
       - name: Upload diagnostic logs
         if: always()
@@ -95,8 +95,8 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: TABLETKA-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: TABLETKA-release-unsigned-apk
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
           if-no-files-found: error
 
       - name: Publish latest test APK
@@ -107,7 +107,7 @@ jobs:
           name: ТАБЛЕТКА — последняя тестовая версия
           prerelease: true
           make_latest: false
-          files: android/app/build/outputs/apk/debug/app-debug.apk
+          files: android/app/build/outputs/apk/release/app-release-unsigned.apk
           body: |
             Автоматическая тестовая сборка приложения «ТАБЛЕТКА».
             Данные пользователя хранятся локально и сохраняются при обновлении приложения при неизменном appId.
