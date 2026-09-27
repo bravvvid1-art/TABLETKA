@@ -81,7 +81,9 @@ jobs:
       - name: Zipalign unsigned release APK
         shell: bash
         run: |
-          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -f -p 4             android/app/build/outputs/apk/release/app-release-aligned-unsigned.apk             android/app/build/outputs/apk/release/app-release-aligned-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -f -p 4 \
+            android/app/build/outputs/apk/release/app-release-unsigned.apk \
+            android/app/build/outputs/apk/release/app-release-aligned-unsigned.apk
 
       - name: Prepare signing tools artifact
         shell: bash
