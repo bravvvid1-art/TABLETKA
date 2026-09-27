@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
-  "releaseUrl": "https://github.com/bravvvid1-art/TABLETKA/releases/tag/test-latest",
-  "notes": "Первая тестовая версия"
+  "version": "1.0.1",
+  "releaseUrl": "https://github.com/bravvvid1-art/TABLETKA/releases",
+  "notes": "Первая версия со стабильной подписью для последующих обновлений"
 }
