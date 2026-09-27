@@ -78,6 +78,25 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleRelease 2>&1 | tee ../gradle-build.log
 
+      - name: Zipalign unsigned release APK
+        shell: bash
+        run: |
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -f -p 4             android/app/build/outputs/apk/release/app-release-aligned-unsigned.apk             android/app/build/outputs/apk/release/app-release-aligned-unsigned.apk
+
+      - name: Prepare signing tools artifact
+        shell: bash
+        run: |
+          mkdir -p android-signing-tools/lib
+          cp "$ANDROID_HOME/build-tools/35.0.0/apksigner" android-signing-tools/
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" android-signing-tools/lib/
+
+      - name: Upload signing tools
+        uses: actions/upload-artifact@v4
+        with:
+          name: TABLETKA-android-signing-tools
+          path: android-signing-tools/
+          if-no-files-found: error
+
       - name: Upload diagnostic logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -95,8 +114,8 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: TABLETKA-release-unsigned-apk
-          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          name: TABLETKA-release-aligned-unsigned-apk
+          path: android/app/build/outputs/apk/release/app-release-aligned-unsigned.apk
           if-no-files-found: error
 
       - name: Publish latest test APK
@@ -107,7 +126,7 @@ jobs:
           name: ТАБЛЕТКА — последняя тестовая версия
           prerelease: true
           make_latest: false
-          files: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          files: android/app/build/outputs/apk/release/app-release-aligned-unsigned.apk
           body: |
             Автоматическая тестовая сборка приложения «ТАБЛЕТКА».
             Данные пользователя хранятся локально и сохраняются при обновлении приложения при неизменном appId.
