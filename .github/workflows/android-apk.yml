@@ -120,15 +120,3 @@ jobs:
           path: android/app/build/outputs/apk/release/app-release-aligned-unsigned.apk
           if-no-files-found: error
 
-      - name: Publish latest test APK
-        if: success() && github.ref == 'refs/heads/main'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: test-latest
-          name: ТАБЛЕТКА — последняя тестовая версия
-          prerelease: true
-          make_latest: false
-          files: android/app/build/outputs/apk/release/app-release-aligned-unsigned.apk
-          body: |
-            Автоматическая тестовая сборка приложения «ТАБЛЕТКА».
-            Данные пользователя хранятся локально и сохраняются при обновлении приложения при неизменном appId.
